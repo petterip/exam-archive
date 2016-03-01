@@ -1,6 +1,6 @@
 # Exam Archive
 
-Originally created by @petterip & @akairala in spring 2015.
+Originally created by <a href="https://github.com/petterip">petterip</a> & <a href="https://github.com/akairala">akairala</a> in spring 2015.
 
 The Exam Archive offers users to archive previous exams of courses of an university or other educational institute to a Web service, where they are available to be searched and downloaded by students. Users of Exam Archive are divided in three types: Super admins, Admins and Basic users. Super admins are administrators of whole application and can divide courses in groups by creating archives, which can represent for example a faculty, department or field of study, which makes our application more suitable for different kind of organisations levels. Admins can act as administrators of a single archive, where they can edit course information, create new courses and add exams with PDF attachment under them. It is also possible to store detailed information about a single course and exam, like course code, name, credit points, teacher, language, course website, description and exam date. Basic users can access to single archive, view courses and download exams of them as PDF-file. All user types can also edit their own profile, but only Super admins can edit, remove and create new users. 
 
