@@ -1,0 +1,674 @@
+Module exam_archive
+-------------------
+
+Variables
+---------
+DEFAULT_DATA_DUMP
+    SQL create and insert clauses for testing.
+
+DEFAULT_DB_PATH
+    Default path for exam archive SQLite database.
+
+DEFAULT_SCHEMA
+    SQL create clauses for creating the database.
+
+Classes
+-------
+ExamArchiveDatabase 
+    API to access the exam archive database.
+
+    Ancestors (in MRO)
+    ------------------
+    exam_archive.ExamArchiveDatabase
+    __builtin__.object
+
+    Methods
+    -------
+    __init__(self, db_path=None)
+        db_path is the address of the path with respect to the calling script.
+        If db_path is None, DEFAULT_DB_PATH is used instead.
+
+    authorize_user(self, username, password)
+        Check if a user can be authorized with a given username and password.
+
+        INPUT:
+
+        * `username`: Visible username.
+        * `password`: Hashed password of the user.
+
+        OUTPUT:
+
+        * If the username and password were correct, user ID is returned, otherwise None.
+
+    browse_archives(self, limit=-1, offset=0, offset_represents_ids=False)
+        List all the archives in the database, or only the first archives specified by the parameters limit and offset.
+
+        INPUT:
+
+        * `limit`: the maximum length of the list (-1 means no limit)
+        * `offset`: skip the amount of offset archives from the beginning, offset being the first returned archive
+        (zero means to start from the beginning)
+        * `offset_represents_ids`: if false, the amount of rows specified by the `offset` parameter are skipped
+        (e.g. for paging). If true, only the archives are returned having archive_id greater or equal than `offset`.
+
+        OUTPUT:
+
+        * A list of archives, if one or more archives were found, empty list otherwise. Each archive in the list is a
+        dictionary containing the same structure as returned by get_archive.
+
+    browse_courses(self, archive_id, limit=-1, offset=0, offset_represents_ids=False)
+        List all the course in an archive, or only the first courses specified by the parameters limit and offset.
+
+        INPUT:
+
+        * `archive_id`: The ID of an archive
+        * `limit`: the maximum length of the list (-1 means no limit)
+        * `offset`: skip the amount of offset courses from the beginning, offset being the first returned course
+        (zero means to start from the beginning)
+        * `offset_represents_ids`: if false, the amount of rows specified by the `offset` parameter are skipped
+        (e.g. for paging). If true, only the courses are returned having course_id greater or equal than `offset`.
+
+        OUTPUT:
+
+        * A list of courses, if one or more archives were found, empty list otherwise. Each course in the list is a
+        dictionary containing the same structure as returned by get_course.
+
+    browse_exams(self, course_id, limit=-1, offset=0, offset_represents_ids=False)
+        List all the exams of a course, or only the first exams specified by the parameters limit and offset.
+
+        INPUT:
+
+        * `course_id`: the ID of the course
+        * `limit`: the maximum length of the list (-1 means no limit)
+        * `offset`: skip the amount of offset exams from the beginning, offset being the first returned exam
+        (zero means to start from the beginning)
+        * `offset_represents_ids`: if false, the amount of rows specified by the `offset` parameter are skipped
+        (e.g. for paging). If true, only the exams are returned having exam_id greater or equal than `offset`.
+
+        OUTPUT:
+
+        * A list of exams, if one or more archives were found, empty list otherwise. Each exam in the list is a
+        dictionary containing the same structure as returned by get_exam.
+
+    browse_teachers(self, limit=-1, offset=0, offset_represents_ids=False)
+        List all the teachers in the database, or only the first teachers specified by the parameters limit and offset.
+
+        INPUT:
+
+        * `course_id`: the ID of the course
+        * `limit`: the maximum length of the list (-1 means no limit)
+        * `offset`: skip the amount of offset exams from the beginning, offset being the first returned exam
+        (zero means to start from the beginning)
+        * `offset_represents_ids`: if false, the amount of rows specified by the `offset` parameter are skipped
+        (e.g. for paging). If true, only the teachers are returned having teacher_id greater or equal than `offset`.
+
+        OUTPUT:
+
+        * A list of exams, if one or more archives were found, empty list otherwise. Each exam in the list is a
+        dictionary containing the same structure as returned by _create_object.
+
+    browse_users(self, limit=-1, offset=0, offset_represents_ids=False)
+        List all the users in the database, or only the first users specified by the parameters limit and offset.
+
+        INPUT:
+
+        * `limit`: the maximum length of the list (-1 means no limit)
+        * `offset`: skip the amount of offset users from the beginning, offset being the first returned user
+        (zero means to start from the beginning)
+        * `offset_represents_ids`: if false, the amount of rows specified by the `offset` parameter are skipped
+        (e.g. for paging). If true, only the users are returned having user_id greater or equal than `offset`.
+
+        OUTPUT:
+
+        * A list of users, if one or more users were found, empty list otherwise. Each user in the list is a
+        dictionary containing the same structure as returned by get_user.
+
+    clean(self)
+        Purge the database removing old values.
+
+    create_archive(self, archive_name, organisation_name, identification_needed=False, modifier_id=None)
+        Create new exam archive to database. An archive is specific to certain 
+        faculty or department, for example "Blanko" for Information Processing
+        Science faculty of Oulu University.
+
+        INPUT:
+
+        * `archive_name`: The name of the archive to be created.
+        * `organisation_name`: The name of the organisation, such as faculty, department or school, owning the archive.
+        * `identification_needed`:  Whether authorization is required from basic users to view exams.
+        * `modifier_id`: The creator or last modifier of the archive or None if not specified.
+
+        OUTPUT:
+
+        * ID of the new archive, if the archive was created successfully, None otherwise.
+
+        Raises exception ExamDatabaseErrorExists, if the an archive already exists with the given name.
+        Raises exception ExamDatabaseErrorNotFound, if given modifier was not found.
+
+    create_course(self, archive_id, course_code, course_name, description, teacher_id, url, credit_points, language_id, modifier_id=None)
+        Create an course to the archive. Archive can include multiple courses under same name and other information,
+        but there can't be be two courses with same name and language.
+
+        INPUT:
+
+        * `archive_id`: ID of the archive where the course belongs to.
+        * `course_code`: Code of the course, which is used to identify course for in curriculum.
+        * `course_name`: Textual name of the course to be created.
+        * `description`: Description of the course.
+        * `teacher_id`: ID of the teacher, lecturer or other responsible person of the course.
+        * `url`: Course home page URL.
+        * `credit_points`: Amount of credit points, that can be earned from the course.
+        * `language_id`: Language identifier of the language used in the course.
+        * `modifier_id`: The creator or last modifier of the course or None if not specified.
+
+        OUTPUT:
+
+        * ID of the new course entity, if the course was created successfully, None otherwise.
+
+        Raises exception ExamDatabaseErrorExists, if course with given course_name and language_id combination already exists.
+        Raises ExamDatabaseErrorNotFound if given archive, teacher, language or modifier were not found in the database.
+
+    create_exam(self, course_id, examiner_id, date, file_attachment, language_id='fi', modifier_id=None)
+        Create an exam and attach it to the given course. A course can be specified by giving either course name or
+        course code.
+
+        INPUT:
+
+        * `course_id`: The idenfier of the course, where the exam belongs to
+        * `examiner_id`: ID of the teacher, lecturer or other person responsible of overseeing the exam.
+        * `date`: Date of the exam given in format of YYYY-MM-DD.
+        * `file_attachment`: Identifier for the file attachment.
+        * `language_id`: Language identifier for the exam.
+        * `modifier_id`: The creator or last modifier of the exam or None if not specified.
+
+        OUTPUT:
+
+        * ID of the new exam entity, if the exam was created successfully, None otherwise.
+
+        Raises exception ExamDatabaseErrorExists, if the an exam already exists with the given date and course,
+        Raises exception ExamDatabaseErrorNotFound if course, examiner, language or modifier does not exist.
+        Raises exception ValueError if the date is not given in format of YYYY-MM-DD.
+
+    create_tables_from_schema(self, schema=None)
+        Create programmatically the tables from a schema file.
+        schema contains the path to the .sql schema file. If it is None,  
+        DEFAULT_SCHEMA is used instead.
+
+    create_teacher(self, first_name, last_name, office='', street_address='', postal_code='', city='', phone='', email='', other_info='', modifier_id=None)
+        Create new teacher entity to the database.
+
+        INPUT:
+
+        * `first_name`: First name (cannot be blank)
+        * `last_name`: Last name (cannot be blank)
+        * `office`: Office information
+        * `street_address`: Street address or P.O.Box
+        * `postal_code`: Postal code
+        * `city`: City
+        * `phone`: Phone number
+        * `email`: Email address
+        * `other_info`: Other contact information
+        * `modifier_id`: Creator or last modifier
+
+        OUTPUT:
+
+        * ID of the new user or None, if there was an error creating new teacher.
+
+        Raises exception ValueError if first_name or last_name were not given, or if email address was malformed.
+
+    create_user(self, username, password, user_type='basic', archive_id=None, modifier_id=None)
+        Create new user to database. The user_type can be one of the following:
+
+        * 'basic': The user has only view access to archive specified by archive_id
+        * 'admin': The user has read-write access to archive specified by archive_id
+        * 'super': The user has read-write access to all the archives in the database.
+
+        INPUT:
+
+        * `username`: Visible username.
+        * `password`: Hashed password of the user.
+        * `user_type`: User type identifies whether the user is superuser, admin or regular view-only user. The user_type must be one of the values 'super', 'admin' or 'basic'.
+        * `archive_id`: The ID of an archive where the user has access to.
+        * `modifier_id`: The creator or of the user or None if not specified.
+
+        OUTPUT:
+
+        * ID of the new user.
+
+        Raises exception ExamDatabaseErrorExists, if user with the same username already exists, given archive or modifier does not exist.
+        ExamDatabaseErrorNotFound if archive or modifier do not exist.
+        Raises exception ValueError if the user_type was not one of the defined values.
+
+    edit_archive(self, archive_id, archive_name, organisation_name, identification_needed=False, modifier_id=None)
+        Update an archive in the database. An archive can be specified by giving archive id.
+
+        INPUT:
+
+        * `archive_id`: ID of the archive to be updated
+        * `archive_name`: The name of the archive to be edited.
+        * `organisation_name`: The name of the organisation, such as faculty, department or school, owning the archive.
+        * `identification_needed`:  Whether authorization is required from basic users to view archive.
+        * `modifier_id`: The creator or last modifier of the archive or None if not specified.
+
+        OUTPUT:
+
+        * ID of the archive, if the archive was edited successfully and None if the archive did not exist or there was
+        an error updating the database.
+
+        Raises exception ExamDatabaseErrorExists, if the an archive already exists with the given name.
+        Raises exception ExamDatabaseErrorNotFound, if given modifier does not exist.
+
+    edit_course(self, course_id, course_code, course_name, description, teacher_id, url, credit_points, language_id, modifier_id=None)
+        Update an course in the archive identified by a course ID. Archive can include multiple courses under same name 
+        and other information, but there cannot be be two courses with same name and language.
+
+        INPUT:
+
+        * `course_id`: ID of the course to be updated
+        * `course_code`: Code of the course, what is used to identify course for in curriculum.
+        * `course_name`: Textual name of the course to be created.
+        * `description`: Description of the course.
+        * `teacher_id`: Name of the teacher, lecturer or other responsible person of the course.
+        * `url`: Course home page URL.
+        * `credit_points`: Amount of credit points, that can be earned from the course.
+        * `language_id`: Language identifier of the language used in the course.
+        * `modifier_id`: The creator or last modifier of the course or None if not specified.
+
+        OUTPUT:
+
+        * ID of the course, if the course was updated successfully and None if the course did not exist or there was
+        an error updating the database.
+
+        Raises exception ExamDatabaseErrorExists, if course with given course_name and language_id combination already 
+        exists. Raises ExamDatabaseErrorNotFound, if given teacher, language or modifier does not exist.
+
+    edit_exam(self, exam_id, course_id, examiner_id, date, file_attachment, language_id, modifier_id=None)
+        Update an exam in the archive.
+
+        INPUT:
+
+        * `exam_id`: The ID of the exam to be updated
+        * `course_id`: The ID of the course where the exam belongs to
+        * `examiner_id`: ID of the teacher, lecturer or other person responsible of overseeing the exam.
+        * `date`: Date of the exam given in format of YYYY-MM-DD.
+        * `file_attachment`: Identifier for the file attachment.
+        * `language_id`: Language identifier for the exam.
+        * `modifier_id`: The creator or last modifier of the exam or None if not specified.
+
+        OUTPUT:
+
+        * True, if the exam was created successfully, False otherwise.
+
+        Raises exception ExamDatabaseErrorExists, if the an exam already exists with the given course, date and language.
+        Raises exception ValueError if the date was not given in format YYYY-MM-DD. Raises ExamDatabaseErrorNotFound if
+        course, modifier, language or examiner do not exist.
+
+    edit_exam_file(self, exam_id, file_attachment, modifier_id=None)
+        Update an exam file attachment.
+
+        INPUT:
+
+        * `exam_id`: The ID of the exam to be updated
+        * `file_attachment`: Identifier for the file attachment.
+        * `modifier_id`: The creator or last modifier of the exam or None if not specified.
+
+        OUTPUT:
+
+        * True, if the exam was updated successfully, False otherwise.
+
+        Raises ExamDatabaseErrorNotFound if course, modifier, language or examiner do not exist.
+
+    edit_teacher(self, teacher_id, first_name, last_name, office='', street_address='', postal_code='', city='', phone='', email='', other_info='', modifier_id=None)
+        Update teacher details. The teacher is identified by the given teacher ID.
+
+        INPUT:
+
+        * `teacher_id`: The ID of the teacher to be modified.
+        * `first_name`: First name (cannot be blank)
+        * `last_name`: Last name (cannot be blank)
+        * `office`: Office information
+        * `street_address`: Street address or P.O.Box
+        * `postal_code`: Postal code
+        * `city`: City
+        * `phone`: Phone number
+        * `email`: Email address
+        * `other_info`: Other contact information
+        * `modifier_id`: Creator or last modifier
+
+        OUTPUT:
+
+        * ID of the updated message, if the user details were modified successfully or None, if not.
+
+        Raises exception ExamDatabaseError if there was an error updating the teacher details.
+        Raises exception ValueError if first_name or last_name were not given.
+        ExamDatabaseErrorNotFound if modifier does not exist.
+
+    edit_user(self, user_id, username, password, user_type='basic', archive_id=None, modifier_id=None)
+        Update user details. The user is identified by the given user ID.
+
+        INPUT:
+
+        * `user_id`: The ID of the user to be modified.
+        * `username`: Visible username.
+        * `password`: Hashed password of the user.
+        * `user_type`: User type identifies whether the user in superuser, admin or regular view-only user. The user_type must be one of the values 'super', 'admin' or 'basic'.
+        * `archive_id`: The ID of an archive where the user has access to.
+        * `modifier_id`: The creator or of the user or None if not specified.
+
+        OUTPUT:
+
+        * True, if the user details were modified successfully or False, if not.
+
+        Raises exception ExamDatabaseErrorExists, if user with the same username already exists. Raises exception ExamDatabaseError if there was an error creating new user.
+        ExamDatabaseErrorNotFound if modifier does not exist.
+        Raises exception ValueError if the user_type was not one of the defined values.
+
+    get_archive(self, archive_id)
+        Get archive details from the database. An archive can be specified by giving archive id.
+
+        INPUT:
+
+        * `archive_id`: ID of the archive
+
+        OUTPUT is a dictionary containing the following keys:
+
+        * `archive_name`: The name of the archive
+        * `organisation_name`: The name of the organisation, such as faculty, department or school, owning the archive.
+        * `identification_needed`:  Whether authorization is required from basic users to view exams.
+        * `modifier_id`: The creator or last modifier of the archive or None if not specified.
+        * `last_modified`: The date archive was last modified
+
+        If archive was not found, None is returned.
+
+    get_archive_by_name(self, archive_name)
+        Find an archive by name. An archive can be specified by giving the full name.
+
+        INPUT:
+
+        * `archive_name`: Name of the archive.
+
+        OUTPUT is a dictionary containing the following keys:
+
+        * `archive_id`: The name of the archive
+        * `archive_name`: The name of the archive
+        * `organisation_name`: The name of the organisation, such as faculty, department or school, owning the archive.
+        * `identification_needed`:  Whether authorization is required from basic users to view exams.
+        * `modifier_id`: The creator or last modifier of the archive or None if not specified.
+        * `last_modified`: The date archive was last modified
+
+        If archive was not found, None is returned.
+
+    get_course(self, course_id)
+        Get course details from the database. A course is specified by giving course id.
+
+        INPUT:
+
+        * `course_id`: ID of the course
+
+        OUTPUT is a dictionary containing the following keys:
+
+        * `archive_id`: The ID of an archive where the course belongs to
+        * `course_code`: Code of course, which used to to identify course in curriculum
+        * `course_name`: Textual name of the course
+        * `description`: Description of course
+        * `teacher_id`: Responsible teacher of the course
+        * `url`: URL address to the course webpage
+        * `credit_points`: Number of total credit points earned from course
+        * `language_id`: Identifies language used in course
+        * `modifier_id`: Creator or last modifie
+        * `last_modified`: Last modified date.
+
+        If course was not found, None is returned.
+
+    get_course_by_name(self, course_name)
+        Find course details by course name. A course is specified by giving its full name.
+
+        INPUT:
+
+        * `course_id`: ID of the course
+
+        OUTPUT is a dictionary containing the following keys:
+
+        * `course_id`: The ID of the course
+        * `archive_id`: The ID of an archive where the course belongs to
+        * `course_code`: Code of course, which used to to identify course in curriculum
+        * `course_name`: Textual name of the course
+        * `description`: Description of course
+        * `teacher_id`: Responsible teacher of the course
+        * `url`: URL address to the course webpage
+        * `credit_points`: Number of total credit points earned from course
+        * `language_id`: Identifies language used in course
+        * `modifier_id`: Creator or last modifie
+        * `last_modified`: Last modified date.
+
+        If course was not found, None is returned.
+
+    get_exam(self, exam_id)
+        Get exam details from the database. An exam is specified by giving exam id.
+
+        INPUT:
+
+        * `exam_id`: ID of the exam
+
+        OUTPUT is dictionary containing the following keys:
+
+        * `course_id`: Course ID of the exam
+        * `examiner_id`: Responsible teacher of the exam
+        * `date`: Date of the exam
+        * `file_attachment`: File attachment id of the PDF file
+        * `language_id`: Language of the course
+        * `modifier_id`: Creator or last modifier
+        * `last_modified`: Last modified date
+
+        If exam was not found, None is returned.
+
+        Raises exception ExamDatabaseError if there was an error accessing the database.
+
+    get_teacher(self, teacher_id)
+        Get teacher details. The teacher is identified by the given teacher ID.
+
+        INPUT:
+
+        * `teacher_id`: The ID of the teacher.
+
+        OUTPUT:
+
+        * `teacher_id`: The ID of the teacher to be modified.
+        * `first_name`: First name
+        * `last_name`: Last name
+        * `office`: Office information
+        * `street_address`: Street address or P.O.Box
+        * `postal_code`: Postal code
+        * `city`: City
+        * `phone`: Phone number
+        * `email`: Email address
+        * `other_info`: Other contact information
+        * `modifier_id`: Creator or last modifier
+        * `last_modified`: Date when the teacher entity was last modified.
+
+        If the teacher was not found with the given ID, None is returned.
+
+    get_teacher_by_name(self, first_name, last_name)
+        Find teacher details by teacher name. A teacher is specified by giving its full name.
+
+        INPUT:
+
+        * `teacher_id`: ID of the teacher
+
+        OUTPUT is a dictionary containing the following keys:
+
+        * `teacher_id`: The ID of the teacher to be modified.
+        * `first_name`: First name
+        * `last_name`: Last name
+        * `office`: Office information
+        * `street_address`: Street address or P.O.Box
+        * `postal_code`: Postal code
+        * `city`: City
+        * `phone`: Phone number
+        * `email`: Email address
+        * `other_info`: Other contact information
+        * `modifier_id`: Creator or last modifier
+        * `last_modified`: Date when the teacher entity was last modified.
+
+        If teacher was not found, None is returned.
+
+    get_user(self, user_id)
+        Get user details. The user is identified by the given user ID.
+
+        INPUT:
+
+        * `user_id`: The ID of the user.
+
+        OUTPUT:
+
+        * `username`: Visible username.
+        * `password`: Hashed password of the user.
+        * `user_type`: User type identifies whether the user in superuser, admin or regular view-only user. The user_type is one of values 'super', 'admin' or 'basic'.
+        * `archive_id`: The ID of an archive where the user has access to.
+        * `modifier_id`: The creator or of the user or None if not specified.
+
+        If the user was not found with the given ID, None is returned.
+
+    get_user_by_name(self, username)
+        Find user details by user name.
+
+        INPUT:
+
+        * `user_name`: Visible username
+
+        OUTPUT is a dictionary containing the following keys:
+
+        * `user_id`: ID of the user.
+        * `username`: Visible username.
+        * `password`: Hashed password of the user.
+        * `user_type`: User type identifies whether the user in superuser, admin or regular view-only user. The user_type is one of values 'super', 'admin' or 'basic'.
+        * `archive_id`: The ID of an archive where the user has access to.
+        * `modifier_id`: The creator or of the user or None if not specified.
+
+        If user was not found, None is returned.
+
+    load_init_values(self)
+        Populate the database with initial values.
+
+    load_table_values_from_dump(self, dump=None)
+        Populate programmatically the tables from a dump file.
+        dump is the path to the .sql dump file. If it is None,  
+        DEFAULT_DATA_DUMP is used instead.
+
+    remove_archive(self, archive_id)
+        Remove an archive from the database. An archive can be specified by giving archive id. Note: Removing an archive deletes all the courses and all the exams attached to it!
+
+        INPUT:
+
+        * `archive_id`: ID of the archive to be removed
+
+        OUTPUT:
+
+        * If the archive was successfully deleted True is returned, otherwise False.
+
+    remove_course(self, course_id)
+        Remove a course from the database. A course is specified by giving course id. Note: Removing a course deletes all the exams attached to it!
+
+        INPUT:
+
+        * `course_id`: ID of the course
+
+        OUTPUT:
+
+        * If the course successfully deleted True is returned, otherwise False.
+
+    remove_exam(self, exam_id)
+        Remove exam details from the database. An exam is specified by giving exam id. File attachments do not get deleted automatically as they are not part of the database.
+
+        INPUT:
+
+        * `exam_id`: ID of the exam
+
+        OUTPUT:
+
+        * If the exam successfully deleted True is returned, otherwise False.
+
+    remove_teacher(self, teacher_id)
+        Remove a teacher from the database.
+
+        INPUT:
+
+        * `teacher_id`: ID of the teacher to be deleted.
+
+        OUTPUT:
+
+        * True, if a teacher with the given user_id was found, False otherwise.
+
+        Returns true, if the delete succeeded, otherwise false if there was an error deleting the teacher from the database.
+
+    remove_user(self, user_id)
+        Remove user from the database.
+
+        INPUT:
+
+        * `user_id`: ID of the user to be deleted.
+
+        OUTPUT:
+
+        * True, if a user with the given user_id was removed, False otherwise.
+
+        Returns true, if the delete succeeded, otherwise false if there was an error deleting the user from the database.
+
+    user_has_access(self, user_id, archive_id)
+        Check whether a user has access to a specified archive. The user is identified by the given user ID and archive by the given archive ID.
+
+        INPUT:
+        * `user_id`: The ID of the user.
+        * `archive_id`: The ID of the archive.
+        * `identification_needed`: Identification to the archive needed, true or false
+
+        OUTPUT:
+        * If the user is authorized to access the given archive, True is returned, otherwise False is returned. False is returned also, if the given user_id or archive_id does not exist. If the user is a superuser and an archive exists, True is always returned.
+
+ExamDatabaseError 
+    Exception for general exam archive database error.
+
+    Ancestors (in MRO)
+    ------------------
+    exam_archive.ExamDatabaseError
+    exceptions.Exception
+    exceptions.BaseException
+    __builtin__.object
+
+    Class variables
+    ---------------
+    args
+
+    message
+
+ExamDatabaseErrorExists 
+    Exception for an error, when an entity already exists in the database.
+
+    Ancestors (in MRO)
+    ------------------
+    exam_archive.ExamDatabaseErrorExists
+    exceptions.Exception
+    exceptions.BaseException
+    __builtin__.object
+
+    Class variables
+    ---------------
+    args
+
+    message
+
+ExamDatabaseErrorNotFound 
+    Exception for an error, when a given entity was not found from the database.
+
+    Ancestors (in MRO)
+    ------------------
+    exam_archive.ExamDatabaseErrorNotFound
+    exceptions.Exception
+    exceptions.BaseException
+    __builtin__.object
+
+    Class variables
+    ---------------
+    args
+
+    message

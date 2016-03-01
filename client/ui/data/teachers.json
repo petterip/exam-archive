@@ -1,0 +1,53 @@
+ { "collection":
+  {
+    "version" : "1.0",
+    "href" : "http://localhost:5000/exam_archive/api/archive/teachers",
+    "items" : [
+      { "href" : "/exam_archive/api/archive/teachers/1/",
+        "read-only": true,
+        "data" : [
+          { "name" : "teacherId", "value" : "1" },
+          { "name" : "firstName", "value" : "Tero" },
+          { "name" : "lastName", "value" : "Testaaja" },
+          { "name" : "office", "value" : "TOL301" },
+          { "name" : "streetAddress", "value" : "Testiosoite 123" },
+          { "name" : "postalCode", "value" : "90500" },
+          { "name" : "city", "value" : "OULU" },
+          { "name" : "phone", "value" : "+358401231231" },
+          { "name" : "email", "value" : "tero.testaaja@oulu.fi" },
+          { "name" : "otherInfo", "value" : "NULL" }
+        ]
+
+      },
+       { "href" : "/exam_archive/api/archive/teachers/2/",
+        "read-only": true,
+        "data" : [
+          { "name" : "teacherId", "value" : "2" },
+          { "name" : "firstName", "value" : "Terhi" },
+          { "name" : "lastName", "value" : "Testi" },
+          { "name" : "office", "value" : "TOL301" },
+          { "name" : "streetAddress", "value" : "Testikuja 12 A 1" },
+          { "name" : "postalCode", "value" : "90500" },
+          { "name" : "city", "value" : "OULU" },
+          { "name" : "phone", "value" : "+358404564566" },
+          { "name" : "email", "value" : "terhi.testi@oulu.fi" },
+          { "name" : "otherInfo", "value" : "NULL" }
+        ]
+
+      }
+    ],
+    "template" : {
+          "data" : [
+            {"prompt" : "Insert teacher ID", "name" : "teacherId", "value" : "", "required":true},
+            {"prompt" : "Insert first name", "name" : "firstName", "value" : "", "required":true},
+            {"prompt" : "Insert last name", "name" : "lastName", "value" : "", "required":true},
+            {"prompt" : "Insert street address", "name" : "streetAddress", "value" : "", "required":false},
+            {"prompt" : "Insert postalCode", "name" : "postalCode", "value" : "", "required":false},
+            {"prompt" : "Insert city", "name" : "city", "value" : "", "required":false},
+            {"prompt" : "Insert phone", "name" : "phone", "value" : "", "required":false},
+            {"prompt" : "Insert email", "name" : "email", "value" : "", "required":false},
+            {"prompt" : "Insert otherInfo", "name" : "otherInfo", "value" : "", "required":false}
+          ]
+    }
+  }
+}

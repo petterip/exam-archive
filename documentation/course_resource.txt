@@ -1,0 +1,188 @@
+Module course_resource
+----------------------
+
+Variables
+---------
+API_VERSION
+
+COLLECTIONJSON
+
+COURSE_PROFILE
+
+Classes
+-------
+Course 
+    Resource Course implementation
+
+    Ancestors (in MRO)
+    ------------------
+    course_resource.Course
+
+    Methods
+    -------
+    delete(self, archive_id, course_id)
+        Delete a user from the exam archive. Authorization is required (user must be of type 'super').
+
+        INPUT:
+
+        * `archive_id` : Identifies the archive, where course belongs to
+        * `course_id` Identifies the course, which is going to be deleted
+
+        HEADERS:
+
+        * `Accept`: application/json
+        * `Authorization`: HTTP basic authentication header with user name and password as specified in RFC 2617.
+
+        RETURN CODES:
+
+        `204` Course entity successfully deleted.
+        `401` Not logged in. You are not logged in, unable delete the user.
+        `403` Access forbidden. You are not authorizated. (must be a user of type 'super')
+        `404` Course not found. Given course was not found.
+        `500` Database error. Please, contact the adminnistrator.
+
+        In case of error, the response media type Problem+JSON is returned with the error message above.
+
+    get(self, archive_id, course_id)
+        Get a list of courses in the exam archive.
+
+        INPUT:
+
+        * `archive_id` : Identifies the archive, where course belongs to
+        * `course_id` : Identifies the course
+
+        HEADERS:
+
+        * `Accept`: application/json
+        * `Authorization`: HTTP basic authentication header with user name and password as specified in RFC 2617.
+
+        ENTITY BODY OUTPUT FORMAT:
+
+        * `Media type`: Collection+JSON:
+            http://amundsen.com/media-types/collection/
+
+        * `Profile`: Course profile
+            http://atlassian.virtues.fi:8090/display/PWP/PWP11#PWP11-Courseprofile
+
+        RETURN CODES:
+
+        `200` Course information was returned succesfully.
+        `400` No archive id. The archive id was not specified.
+        `400` No course id. The course id was not specified.
+        `401` Not logged in. You are not logged in, unable to get course list information.
+        `403` Access forbidden. You are not authorizated to access the course information.
+        `404` Not found. No course found.
+
+        In case of error, the response media type Problem+JSON is returned with the error message above.
+
+    put(self, archive_id, course_id)
+        Update a course in the exam archive. Authorization is required (user must be of type 'super').
+
+        INPUT:
+
+        * `archive_id` : Identifies the archive, where course belongs to
+        * `course_id` Identifies the course to be updated
+
+        HEADERS:
+
+        * `Accept`: application/json
+        * `Authorization`: HTTP basic authentication header with user name and password as specified in RFC 2617.
+
+        ENTITY BODY OUTPUT FORMAT:
+
+        * `Media type`: Collection+JSON:
+            http://amundsen.com/media-types/collection/
+
+        * `Profile`: Course profile
+            http://atlassian.virtues.fi:8090/display/PWP/PWP11#Course+profile
+
+        RETURN CODES:
+
+        `200` New course was added successfully.
+        `400` Error in request format. It is not allowed to move a course to a different archive.
+        `400` Error in request format. Request format does not follow the template.
+        `401` Not logged in. You are not logged in, unable to add new course.
+        `403` Access forbidden. You are not authorizated.
+        `404` Course not found. Given course id was not found.
+        `409` Error updating course. Course with the same course name and language id already exists.
+        `415` Unsupported media type: Use a JSON compatible format.
+        `500` Database error. Please, contact the administrator.
+
+        In case of error, the response media type Problem+JSON is returned with the error message above.
+
+CourseList 
+    Resource CourseList implementation
+
+    Ancestors (in MRO)
+    ------------------
+    course_resource.CourseList
+
+    Methods
+    -------
+    get(self, archive_id)
+        Get a list of courses in the exam archive.
+
+        INPUT:
+
+        * `None`
+
+        HEADERS:
+
+        * `Accept`: application/json
+        * `Authorization`: HTTP basic authentication header with user name and password as specified in RFC 2617.
+
+        ENTITY BODY OUTPUT FORMAT:
+
+        * `Media type`: Collection+JSON:
+            http://amundsen.com/media-types/collection/
+
+        * `Profile`: Course profile
+            http://atlassian.virtues.fi:8090/display/PWP/PWP11#PWP11-Courseprofile
+
+        RETURN CODES:
+
+        `200` A list of courses in database was returned succesfully.
+        `400` No archive id. The archive id was not specified.
+        `401` Not logged in. You are not logged in, unable to get course list information.
+        `403` Access forbidden. You are not authorizated to access the course list.
+        `404` Not found. No courses found.
+
+        In case of error, the response media type Problem+JSON is returned with the error message above.
+
+    post(self, archive_id)
+        Adds a new course to the exam archive. Authorization is required (user must be of type 'super').
+
+        INPUT:
+
+        * `archive_id` : Identifies the archive, where course belongs to
+
+        HEADERS:
+
+        * Accept : aplication/json
+        * `Authorization`: HTTP basic authentication header with user name and password as specified in RFC 2617.
+
+        ENTITY BODY INPUT FORMAT:
+        * Media type: Collection+JSON
+        * Profile: Course_profile
+
+        * Media type: Collection+JSON:
+            http://amundsen.com/media-types/collection/
+
+        * Profile: Course profile
+            http://atlassian.virtues.fi:8090/display/PWP/PWP11#Course+profile
+
+        The body should be a Collection+JSON template.
+        Semantic descriptors used in template are name, userType, accessCode and archiveId.
+
+        RETURN CODES:
+
+        `201` New course was added successfully.
+        `400` Error in request format. Request format does not follow the template.
+        `400` Error in request format. ArchiveId and course's name are required.
+        `400` User type was incorrectly none of the following: basic, admin or super.
+        `401` Not logged in. You are not logged in, unable to add new course.
+        `403` Access forbidden. You are not authorizated.
+        `409` Error adding new course. Course with the same course name and language id already exists.
+        `415` Unsupported media type. Use a JSON compatible format.
+
+        In case of error, the response media type Problem+JSON is returned with the error message above.

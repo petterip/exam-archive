@@ -1,0 +1,113 @@
+Module archive_resource
+-----------------------
+
+Variables
+---------
+API_VERSION
+
+ARCHIVE_PROFILE
+
+COLLECTIONJSON
+
+Classes
+-------
+Archive 
+    Resource Archive implementation
+
+    Ancestors (in MRO)
+    ------------------
+    archive_resource.Archive
+
+    Methods
+    -------
+    delete(self, archive)
+        Not implemented.
+
+        RETURN CODES:
+
+        `405` Not implemented. Method not implemented.
+
+        In case of error, the response media type Problem+JSON is returned with the error message above.
+
+    get(self, archive)
+        Get details of an archive.
+
+        INPUT:
+
+        * `archive`: Identifier of the archive.
+
+        HEADERS:
+
+        * `Accept`: application/json
+        * `Authorization`: HTTP basic authentication header with user name and password as specified in RFC 2617.
+
+        ENTITY BODY OUTPUT FORMAT:
+
+        * `Media type`: Collection+JSON:
+            http://amundsen.com/media-types/collection/
+
+        * `Profile`: Archive profile
+            http://atlassian.virtues.fi:8090/display/PWP/PWP11#PWP11-Archiveprofile
+
+        RETURN CODES:
+
+        `200` Archive information was returned succesfully.
+        `401` Not logged in. You are not logged in, unable to get archive information.
+        `404` Not found. Archive not found.
+
+        In case of error, the response media type Problem+JSON is returned with the error message above.
+
+    put(self, archive)
+        Not implemented.
+
+        RETURN CODES:
+
+        `405` Not implemented. Method not implemented.
+
+        In case of error, the response media type Problem+JSON is returned with the error message above.
+
+ArchiveList 
+    Resource ArchiveList implementation
+
+    Ancestors (in MRO)
+    ------------------
+    archive_resource.ArchiveList
+
+    Methods
+    -------
+    get(self)
+        Get a list of archives in the exam archive.
+
+        INPUT:
+
+        * `None`
+
+        HEADERS:
+
+        * `Accept`: application/json
+        * `Authorization`: HTTP basic authentication header with user name and password as specified in RFC 2617.
+
+        ENTITY BODY OUTPUT FORMAT:
+
+        * `Media type`: Collection+JSON:
+            http://amundsen.com/media-types/collection/
+
+        * `Profile`: Archive profile
+            http://atlassian.virtues.fi:8090/display/PWP/PWP11#PWP11-Archiveprofile
+
+        RETURN CODES:
+
+        `200` A list of archives in database was returned succesfully.
+        `401` Not logged in. You are not logged in, unable to get archive information.
+        `404` Not found. No archives found.
+
+        In case of error, the response media type Problem+JSON is returned with the error message above.
+
+    post(self)
+        Not implemented.
+
+        RETURN CODES:
+
+        `405` Not implemented. Method not implemented.
+
+        In case of error, the response media type Problem+JSON is returned with the error message above.

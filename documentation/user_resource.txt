@@ -1,0 +1,187 @@
+Module user_resource
+--------------------
+
+Variables
+---------
+API_VERSION
+
+COLLECTIONJSON
+
+USER_PROFILE
+
+Classes
+-------
+User 
+    Resource User implementation
+
+    Ancestors (in MRO)
+    ------------------
+    user_resource.User
+
+    Methods
+    -------
+    delete(self, username)
+        Delete a user from the exam archive.
+
+        INPUT:
+
+        * `username` : Identifies the user to be modified
+
+        HEADERS:
+
+        * `Accept`: application/json
+        * `Authorization`: HTTP basic authentication header with user name and password as specified in RFC 2617.
+        The user must be super admin.
+
+        RETURN CODES:
+
+        `204` The user information was updated successfully.
+        `401` Not logged in. You are not logged in, unable delete the user.
+        `403` Access forbidden. You are not authorized. (must be a user of type 'super')
+        `404` User not found. Given username was not found.
+        `500` Database error. Please, contact the adminnistrator.
+
+        In case of error, the response media type Problem+JSON is returned with the error message above.
+
+    get(self, username)
+        Get information of an individual user.
+
+        INPUT:
+
+        * `username` : Identifies the user
+
+        HEADERS:
+
+        * `Accept`: application/json
+        * `Authorization`: HTTP basic authentication header with user name and password as specified in RFC 2617.
+        The User must be admin or super admin.
+
+        ENTITY BODY OUTPUT FORMAT:
+
+        * `Media type`: Collection+JSON:
+            http://amundsen.com/media-types/collection/
+
+        * `Profile`: User profile
+            http://atlassian.virtues.fi:8090/display/PWP/PWP11#PWP11-Userprofile
+
+        RETURN CODES:
+
+        `200` The user information was fetched and returned successfully.
+        `401` Not logged in. You are not logged in, unable to get user information.
+        `403` Access forbidden. You are not authorized to access the user list.
+        `404` User not found. Requested user was not found.
+        `409` No userID. Not userID parameter provided.
+
+        In case of error, the response media type Problem+JSON is returned with the error message above.
+
+    put(self, username)
+        Updates user information in the exam archive. 
+
+        INPUT:
+
+        * `username` : Identifies the user to be modified
+
+        HEADERS:
+
+        * `Accept`: application/json
+        * `Authorization`: HTTP basic authentication header with user name and password as specified in RFC 2617.
+        The User must be super admin.
+
+        ENTITY BODY INPUT FORMAT:
+
+        * `Media type`: Collection+JSON:
+            http://amundsen.com/media-types/collection/
+
+        * `Profile`: User profile
+            http://atlassian.virtues.fi:8090/display/PWP/PWP11#PWP11-Userprofile
+
+        RETURN CODES:
+
+        `200` The user information was updated successfully.
+        `400` Error in request format. Request format does not follow template.
+        `400` Incorrect user type. User type was incorrectly none of the following: basic, admin or super.
+        `401` Not logged in. You are not logged in, unable to update user information.
+        `403` Access forbidden. You are not authorized. (must be a user of type 'super')
+        `404` User not found. Given username was not found.
+        `409` Error updating user.
+        `415` Unsupported media type. Use a JSON compatible format.
+        `500` Database error. Please, contact the adminnistrator.
+
+        In case of error, the response media type Problem+JSON is returned with the error message above.
+
+UserList 
+    Resource User implementation
+
+    Ancestors (in MRO)
+    ------------------
+    user_resource.UserList
+
+    Methods
+    -------
+    get(self)
+        Get a list of users in the exam archive.
+
+        INPUT:
+
+        * `None`
+
+        HEADERS:
+
+        * `Accept`: application/json
+        * `Authorization`: HTTP basic authentication header with user name and password as specified in RFC 2617.
+        The User must be admin or super admin.
+
+        ENTITY BODY OUTPUT FORMAT:
+
+        * `Media type`: Collection+JSON:
+            http://amundsen.com/media-types/collection/
+
+        * `Profile`: User profile
+            http://atlassian.virtues.fi:8090/display/PWP/PWP11#PWP11-Userprofile
+
+        RETURN CODES:
+
+        `200` A list of users having access to the exam archive was fetched and returned successfully.
+        `401` Not logged in. You are not logged in, unable to get user information.
+        `403` Access forbidden. "You are not authorized to access the user list.
+        `404` Not found. No users found.
+
+        In case of error, the response media type Problem+JSON is returned with the error message above.
+
+    hash_password(self, password)
+        Hash the password.
+        Adopted based on the work by Miguel: http://blog.miguelgrinberg.com/post/restful-authentication-with-flask
+
+    post(self)
+        Adds a new user to the exam archive. Authorization is required (user must be of type 'super').
+
+        INPUT:
+
+        * `None`
+
+        HEADERS:
+
+        * `Accept`: application/json
+        * `Authorization`: HTTP basic authentication header with user name and password. The User must be super admin.
+
+        ENTITY BODY INPUT FORMAT:
+
+        * `Media type`: Collection+JSON:
+            http://amundsen.com/media-types/collection/
+
+        * `Profile`: User profile
+            http://atlassian.virtues.fi:8090/display/PWP/PWP11#PWP11-Userprofile
+
+        RETURN CODES:
+
+        `201` New user was added successfully.
+        `400` Error in request format. Request format does not follow the template.
+        `400` Error in request format. Name and accessCode are required.
+        `400` Incorrect user type. User type was incorrectly none of the following: basic, admin or super.
+        `401` Not logged in. You are not logged in, unable to add new user.
+        `403` Access forbidden. You are not authorized. (must be a user of type 'super')
+        `409` Error adding new user. User with the same username already exists.
+        `415` Unsupported media type. Use a JSON compatible format.
+        `500` Database error. Please, contact the administrator.
+
+        In case of error, the response media type Problem+JSON is returned with the error message above.

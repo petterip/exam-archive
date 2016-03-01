@@ -1,0 +1,128 @@
+/* Corrects issues with header going under navigation bar */
+.page-header {
+    padding-bottom: 9px;
+    margin: 90px 0 20px;
+    border-bottom: 1px solid #eee;
+}
+
+/* Changes table width to 100% */
+.col-md-6 {
+    width: 100%;
+}
+
+.table2 {
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+#form-content
+{
+    width: 60%;
+}
+
+#form-content input, #form-content select
+{
+    width: 70% !important;
+    margin-bottom: 16px;
+}
+
+#form-content label
+{
+    float: left;
+    width: 30%;
+    padding-top: 5px;
+}
+
+.btn, btn-primary {
+    margin-top: 20px;
+}
+
+#form-content form button {
+    margin-left: 30%;
+}
+
+#form-content button {
+    float: left;
+    margin-right: 10px;
+    width: 18%;
+}
+
+#form-content button.btn-danger {
+    float: right;
+}
+#form-content textarea{
+    width: 70% !important;
+    margin-bottom: 16px;
+}
+
+label {
+    display:block;
+}
+
+#login_form {
+    margin: 0 auto;
+    max-width: 330px;
+    padding: 15px;
+}
+
+#form-content textarea {
+    width: 70%;
+    margin-bottom: 16px;
+}
+
+input.file {
+    position: relative;
+	text-align: right;
+	-moz-opacity:0 ;
+	filter:alpha(opacity: 0);
+	opacity: 0;
+	z-index: 2;
+}
+
+#main-menu li:before
+{
+    content: "\\";
+    font-size: 150%;
+    float: left;
+    color: white;
+    padding-top: 10px;
+}
+
+body.basic tr.admin-only, body.basic td.admin-only, body.basic th.admin-only, body.basic li.admin-only
+{
+    display: none;
+}
+
+div.alert
+{
+    position: absolute;
+    display: block;
+    width: 74%;
+    padding: 4px;
+}
+
+div.alert-danger:before
+{
+    content: "\e101";
+    display: inline-block;
+    font-family: "Glyphicons Halflings";
+    font-size: 140%;
+    padding-right: 6px;
+    vertical-align: -4px;
+}
+
+div.alert-success:before
+{
+    content: "\e089";
+    display: inline-block;
+    font-family: "Glyphicons Halflings";
+    font-size: 140%;
+    padding-right: 6px;
+    vertical-align: -4px;
+}
+
+input#associatedMedia_id {
+    border: medium none;
+    box-shadow: none;
+    padding: 0;
+}

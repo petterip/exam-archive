@@ -1,0 +1,260 @@
+Module exam_resource
+--------------------
+
+Variables
+---------
+API_VERSION
+
+COLLECTIONJSON
+
+EXAM_PROFILE
+
+Classes
+-------
+Exam 
+    Resource Exam implementation
+
+    Ancestors (in MRO)
+    ------------------
+    exam_resource.Exam
+
+    Methods
+    -------
+    delete(self, archive_id, course_id, exam_id)
+        Delete a user from the exam archive. Authorization is required (user must be of type 'super').
+
+        INPUT:
+
+        * `archive_id` : Identifies the archive, where an course belongs to
+        * `course_id` : Identifies the course, where the exam belongs to
+        * `exam_id` : Identifies the exam, that is going to be deleted
+
+        HEADERS:
+
+        * `Accept`: application/json
+        * `Authorization`: HTTP basic authentication header with user name and password as specified in RFC 2617.
+
+        RETURN CODES:
+
+        `204` Exam entity successfully deleted.
+        `401` Not logged in. You are not logged in, unable delete the user.
+        `403` Access forbidden. You are not authorizated. (must be a user of type 'super')
+        `404` Exam not found. Given exam was not found.
+        `500` Database error. Please, contact the adminnistrator.
+
+        In case of error, the response media type Problem+JSON is returned with the error message above.
+
+    get(self, archive_id, course_id, exam_id)
+        Get a list of exams in the exam archive.
+
+        INPUT:
+
+        * `archive_id` : Identifies the archive, where an course belongs to
+        * `course_id` : Identifies the course, where the exam belongs to
+        * `exam_id`: Identifier of the exam
+
+        HEADERS:
+
+        * `Accept`: application/json
+        * `Authorization`: HTTP basic authentication header with user name and password as specified in RFC 2617.
+
+        ENTITY BODY OUTPUT FORMAT:
+
+        * `Media type`: Collection+JSON:
+            http://amundsen.com/media-types/collection/
+
+        * `Profile`: Exam profile
+            http://atlassian.virtues.fi:8090/display/PWP/PWP11#Exam+profile
+
+        RETURN CODES:
+
+        `200` Exam information was returned succesfully.
+        `400` No archive id. The archive id was not specified.
+        `400` No course id. The course id was not specified.
+        `400` No exam id. The exam id was not specified.
+        `401` Not logged in. You are not logged in, unable to get exam list information.
+        `403` Access forbidden. You are not authorizated to access the exam list.
+        `404` Course not found. The course was not found.
+        `404` Not found. Given exam not found.
+
+        In case of error, the response media type Problem+JSON is returned with the error message above.
+
+    put(self, archive_id, course_id, exam_id)
+        Modify an existing exam. Authorization is required (user must be of type 'admin' or 'super').
+
+        INPUT:
+
+        * `archive_id` : Identifies the archive, where an course belongs to
+        * `course_id` : Identifies the course, where the exam belongs to
+        * `exam_id` : Identifies the exam, that is going to be updated
+
+        HEADERS:
+
+        * `Accept`: application/json
+        * `Authorization`: HTTP basic authentication header with user name and password as specified in RFC 2617.
+
+        ENTITY BODY OUT FORMAT:
+
+        * `Media type`: Collection+JSON:
+            http://amundsen.com/media-types/collection/
+
+        * `Profile`: Exam profile
+            http://atlassian.virtues.fi:8090/display/PWP/PWP11#Exam+profile
+
+        RETURN CODES:
+
+        `200` New exam was added successfully.
+        `400` No archive id. The archive id was not specified.
+        `400` No course id. The course id was not specified.
+        `400` No exam id. The exam id was not specified.
+        `400` Error in request format. Request format does not follow the template.
+        `400` Error in request format. Date must be in format YYYY-MM-DD.
+        `401` Not logged in. You are not logged in, unable to add new exam.
+        `403` Access forbidden. You are not authorizated. (must be a user of type 'super')
+        `404` Course not found. The course was not found.
+        `404` Exam not found. The exam was not found.
+        `409` Error adding new exam. Another exam already exists within the same course, with same date and language.
+        `415` Unsupported media type. Use a JSON compatible format.
+        `500` Database error. Please, contact the administrator.
+
+        In case of error, the response media type Problem+JSON is returned with the error message above.
+
+ExamList 
+    Resource ExamList implementation
+
+    Ancestors (in MRO)
+    ------------------
+    exam_resource.ExamList
+
+    Methods
+    -------
+    get(self, archive_id, course_id)
+        Get a list of exams in the exam archive.
+
+        INPUT:
+
+        * `archive_id`: Identifier of the archive in which the exam belongs to
+        * `course_id`: Identifier of the course, in which the exam belongs to
+
+        HEADERS:
+
+        * `Accept`: application/json
+        * `Authorization`: HTTP basic authentication header with user name and password as specified in RFC 2617.
+
+        ENTITY BODY OUTPUT FORMAT:
+
+        * `Media type`: Collection+JSON:
+            http://amundsen.com/media-types/collection/
+
+        * `Profile`: Exam profile
+            http://atlassian.virtues.fi:8090/display/PWP/PWP11#Exam+profile
+
+        RETURN CODES:
+
+        `200` A list of exams was fetched and returned successfully.
+        `400` No archive id. The archive id was not specified.
+        `400` No course id. The course id was not specified.
+        `401` Not logged in. You are not logged in, unable to get exam list information.
+        `403` Access forbidden. You are not authorizated to access the exam list.
+        `404` Course not found. The course was not found.
+        `404` Not found. No exams found.
+
+        In case of error, the response media type Problem+JSON is returned with the error message above.
+
+    post(self, archive_id, course_id)
+        Adds a new exam to the exam archive. Authorization is required (user must be of type 'super').
+
+        INPUT:
+
+        * `archive_id` : Identifies the archive, where an course belongs to
+        * `course_id` : Identifies the course, where the exam belongs to
+
+        HEADERS:
+
+        * `Accept`: application/json
+        * `Authorization`: HTTP basic authentication header with user name and password as specified in RFC 2617.
+
+        ENTITY BODY OUTPUT FORMAT:
+
+        * `Media type`: Collection+JSON:
+            http://amundsen.com/media-types/collection/
+
+        * `Profile`: Exam profile
+            http://atlassian.virtues.fi:8090/display/PWP/PWP11#Exam+profile
+
+        RETURN CODES:
+
+        `201` New exam was added successfully.
+        `400` No archive id. The archive id was not specified.
+        `400` No course id The course id was not specified.
+        `400` User type was incorrectly none of the following: basic, admin or super.
+        `400` Error in request format. Request format does not follow the template.
+        `400` Error in request format. Date is required.
+        `400` Error in request format. Date must be in format YYYY-MM-DD.
+        `401` Not logged in. You are not logged in, unable to add new exam.
+        `403` Access forbidden. You are not authorizated. (must be a user of type 'super')
+        `404` Course not found. The course was not found.
+        `409` Error adding new exam. Another exam already exists within the same course, with same date and language.
+        `415` Unsupported media type. Use a JSON compatible format.
+        `500` Database error. Please, contact the administrator.
+
+        In case of error, the response media type Problem+JSON is returned with the error message above.
+
+ExamUpload 
+    Resource ExamUpload implementation.
+
+    Note: The code is adapted from an example by Petrus Jvrensburg (2013):
+    http://stackoverflow.com/questions/15040706/streaming-file-upload-using-bottle-or-flask-or-similar
+
+    Ancestors (in MRO)
+    ------------------
+    exam_resource.ExamUpload
+
+    Methods
+    -------
+    get(self, archive_id, course_id, exam_id)
+        Check if the actual exam attachment has been uploaded.
+
+        INPUT:
+
+        * `archive_id` : Identifies the archive, where an course belongs to
+        * `course_id` : Identifies the course, where the exam belongs to
+        * `exam_id` : Identifies the exam, that is going to be deleted
+
+        HEADERS:
+
+        * `Accept`: application/json
+        * `Authorization`: HTTP basic authentication header with user name and password as specified in RFC 2617.
+
+        RETURN CODES:
+
+        `200` Exam attachment found.
+        `404` Exam not found. Given exam was not found.
+        `500` Database error. Please, contact the adminnistrator.
+
+        In case of error, the response media type Problem+JSON is returned with the error message above.
+
+    post(self, archive_id, course_id, exam_id)
+        Upload the exam attachment.
+
+        INPUT:
+
+        * `archive_id` : Identifies the archive, where an course belongs to
+        * `course_id` : Identifies the course, where the exam belongs to
+        * `exam_id` : Identifies the exam, that is going to be deleted
+
+        HEADERS:
+
+        * `Accept`: application/json
+        * `Authorization`: HTTP basic authentication header with user name and password as specified in RFC 2617.
+        * `files`: The file attachment to be uploaded
+
+        RETURN CODES:
+
+        `201` Exam attachment has been successfully uploaded.
+        `400` Upload error. Actual file was not included in the request.
+        `400` Upload error. Invalid file name. Only allowed extensions are txt, pdf, png, jpg, jpeg and gif.
+        `404` Exam not found. Given exam was not found.
+        `500` Database error. Please, contact the adminnistrator.
+
+        In case of error, the response media type Problem+JSON is returned with the error message above.

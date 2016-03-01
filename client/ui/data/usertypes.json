@@ -1,0 +1,35 @@
+ { "collection":
+  {
+    "version" : "1.0",
+    "href" : "http://localhost:5000/client/usertypes/",
+    "items" : [
+      { "href" : "/exam_archive/api/usertypes/basic/",
+        "read-only": true,
+        "data" : [
+          { "name" : "id", "value" : "basic" },
+          { "name" : "name", "value" : "Basic user" }
+        ]
+      },
+      { "href" : "/exam_archive/api/usertypes/admin/",
+        "read-only": true,
+        "data" : [
+          { "name" : "id", "value" : "admin" },
+          { "name" : "name", "value" : "Archive Administrator" }
+        ]
+      },
+      { "href" : "/exam_archive/api/usertypes/super/",
+        "read-only": true,
+        "data" : [
+          { "name" : "id", "value" : "super" },
+          { "name" : "name", "value" : "Super Administrator" }
+        ]
+      }
+    ],
+    "template" : {
+          "data" : [
+            {"prompt" : "Insert user type ID", "name" : "id", "value" : "", "required":true},
+            {"prompt" : "Insert user type name", "name" : "name", "value" : "", "required":true}
+          ]
+    }
+  }
+}

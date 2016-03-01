@@ -1,0 +1,35 @@
+ { "collection":
+  {
+    "version" : "1.0",
+    "href" : "http://localhost:5000/client/languages/",
+    "items" : [
+      { "href" : "/exam_archive/api/languages/fi/",
+        "read-only": true,
+        "data" : [
+          { "name" : "inLanguage", "value" : "fi" },
+          { "name" : "name", "value" : "Finnish" }
+        ]
+      },
+      { "href" : "/exam_archive/api/languages/en/",
+        "read-only": true,
+        "data" : [
+          { "name" : "inLanguage", "value" : "en" },
+          { "name" : "name", "value" : "English" }
+        ]
+      },
+      { "href" : "/exam_archive/api/languages/sv/",
+        "read-only": true,
+        "data" : [
+          { "name" : "inLanguage", "value" : "sv" },
+          { "name" : "name", "value" : "Swedish" }
+        ]
+      }
+    ],
+    "template" : {
+          "data" : [
+            {"prompt" : "Insert language ID", "name" : "inLanguage", "value" : "", "required":true},
+            {"prompt" : "Insert language name", "name" : "name", "value" : "", "required":true}
+          ]
+    }
+  }
+}
