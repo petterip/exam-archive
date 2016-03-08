@@ -1,12 +1,12 @@
-# Exam Archive
+# Examrium
 
 Originally created by <a href="https://github.com/petterip">petterip</a> & <a href="https://github.com/akairala">akairala</a> in spring 2015.
 
-The Exam Archive offers users to archive previous exams of courses of an university or other educational institute to a Web service, where they are available to be searched and downloaded by students. Users of Exam Archive are divided in three types: Super admins, Admins and Basic users. Super admins are administrators of whole application and can divide courses in groups by creating archives, which can represent for example a faculty, department or field of study, which makes our application more suitable for different kind of organisations levels. Admins can act as administrators of a single archive, where they can edit course information, create new courses and add exams with PDF attachment under them. It is also possible to store detailed information about a single course and exam, like course code, name, credit points, teacher, language, course website, description and exam date. Basic users can access to single archive, view courses and download exams of them as PDF-file. All user types can also edit their own profile, but only Super admins can edit, remove and create new users. 
+Examrium offers users to archive previous exams of courses of an university or other educational institute to a Web service, where they are available to be searched and downloaded by students. Users of Examrium are divided in three types: Super admins, Admins and Basic users. Super admins are administrators of whole application and can divide courses in groups by creating archives, which can represent for example a faculty, department or field of study, which makes our application more suitable for different kind of organisations levels. Admins can act as administrators of a single archive, where they can edit course information, create new courses and add exams with PDF attachment under them. It is also possible to store detailed information about a single course and exam, like course code, name, credit points, teacher, language, course website, description and exam date. Basic users can access to single archive, view courses and download exams of them as PDF-file. All user types can also edit their own profile, but only Super admins can edit, remove and create new users. 
 
-Web application is implemented by using single HTML-file as barebone, that is dynamically populated with Javascript. Layout of UI generated with Boostrap-framework. RESTful API in the Exam Archive is used to handle information between client application and SQlite-database. The implementation of API consists from nine resources, which are divided in their own Python files: user_resource.py, archive_resource.py, course_resource.py and exam_resource.py. Note, that teacher and language resources are not implemented in application within the course and so necessary data about them in UI is rendered with JSON (teacher.json, language.json). Uploading PDF files and authentication of a user is also handled with RESTful API.
+Web application is implemented by using single HTML-file as barebone, that is dynamically populated with Javascript. Layout of UI generated with Boostrap-framework. RESTful API in the Examrium is used to handle information between client application and SQlite-database. The implementation of API consists from nine resources, which are divided in their own Python files: user_resource.py, archive_resource.py, course_resource.py and exam_resource.py. Note, that teacher and language resources are not implemented in application within the course and so necessary data about them in UI is rendered with JSON (teacher.json, language.json). Uploading PDF files and authentication of a user is also handled with RESTful API.
 
-The Exam Archive repository contains:
+The Examrium repository contains:
 
 * **db** - A database schema, database dump and a sample database for testing 
 * **documentation** - Documentation for ExamArchiveDatabase class
@@ -21,7 +21,7 @@ The Exam Archive repository contains:
 
 ## Dependencies
 
-The Exam Archive has been tested with Python 2.9.7. The package exam_archive, tests and documentation has following dependencies on external packages:
+Examrium has been tested with Python 2.9.7. The package exam_archive, tests and documentation has following dependencies on external packages:
 
 * **SQLite3**: For database management
 * **UnitTest** and **PyTest**: For testing
