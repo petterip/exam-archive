@@ -1,4 +1,4 @@
-/* Implements basic UI functionality in the Exam Archive.
+/* Implements basic UI functionality in the Examrium.
  *
  * @authors:
  * Ari Kairala, Petteri Ponsimaa
@@ -45,7 +45,7 @@ function authorizeUser() {
 
     // Print the form
     $("#page-header")
-          .html("<h1>Log in to Exam Archive</h1>");
+          .html("<h1>Log in to Examrium</h1>");
     $("#main-content").append($form).show();
 
    	// Hide non-accessible links

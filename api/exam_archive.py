@@ -1,7 +1,7 @@
 # coding=UTF-8
 #
 # Provides the database API to access and modify persistent data
-# in the Exam Archive.
+# in the Examrium.
 #
 # @authors: Ari Kairala, Petteri Ponsimaa
 # The class is based on code made by Ivan Sanchez (from exercise 2 code of database.py).
